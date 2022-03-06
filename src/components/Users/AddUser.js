@@ -51,7 +51,7 @@ const AddUser = props => {
                 key="error-modal"
                 title={error.title}
                 message={error.message}
-                closeModal = {onCloseModal}/> )}
+                closemodal = {onCloseModal}/> )}
             <Card key="add-user" className={classes.input}>
                 <form onSubmit={addUserHandler}>
                     <label htmlFor="username">Username</label>
