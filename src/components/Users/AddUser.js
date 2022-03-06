@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import Button from '../UI/Button';
 import Card from '../UI/Card';
 import ErrorModal from '../UI/ErrorModal';
@@ -6,12 +6,15 @@ import classes from './AddUser.module.css';
 // import Wrapper from '../Helpers/Wrapper';
 
 const AddUser = props => {
-    const [enteredUsername, setEnteredUsername] = useState('');
-    const [enteredAge, setEnteredAge] = useState('');
+    const nameInputRef = useRef();
+    const ageInputRef = useRef();
+
     const [error, setError] = useState();
 
     const addUserHandler = event => {
         event.preventDefault();
+        const enteredUsername = nameInputRef.current.value;
+        const enteredAge = ageInputRef.current.value;
         if(enteredUsername.trim().length === 0 || enteredAge.trim().length === 0) {
             setError({
                 title: 'Invalid input',
@@ -20,7 +23,7 @@ const AddUser = props => {
             return;
         }
 
-        if(enteredAge < 1) {
+        if(+enteredAge < 1) {
             setError({
                 title: 'Invalid age',
                 message: 'Please enter a valid age (> 0)'
@@ -28,17 +31,7 @@ const AddUser = props => {
             return;
         }
 
-        setEnteredAge('');
-        setEnteredUsername('');
         props.onAddUser(enteredUsername, enteredAge);
-    }
-
-    const usernameChangleHandler = event => {
-        setEnteredUsername(event.target.value);
-    }
-
-    const ageChangleHandler = event => {
-        setEnteredAge(event.target.value);
     }
 
     const onCloseModal = event => {
@@ -58,14 +51,12 @@ const AddUser = props => {
                     <input 
                         id="username" 
                         type="text" 
-                        value={enteredUsername} 
-                        onChange={usernameChangleHandler}/>
+                        ref={nameInputRef}/>
                     <label htmlFor="age">Age (Years)</label>
                     <input 
                         id="age" 
                         type="text" 
-                        value={enteredAge} 
-                        onChange={ageChangleHandler}/>
+                        ref={ageInputRef}/>
                     <Button type="submit">Add User</Button>
                 </form>
             </Card>
